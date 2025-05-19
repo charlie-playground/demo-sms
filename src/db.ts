@@ -1,4 +1,4 @@
-/ **
+/**
  * Very light-weight DB abstraction used by the pipeline.
  * In production this would connect to a real database.
  */
