@@ -18,7 +18,7 @@ export interface Context {
 }
 
 async function loadUser(ctx: Context): Promise<Context> {
-  ctx.user = await db.getUser(ctx.incoming.from);
+  ctx.user = await db.getUser({ phone: ctx.incoming.from });
   return ctx;
 }
 
@@ -28,12 +28,12 @@ async function logIncoming(ctx: Context): Promise<Context> {
 }
 
 async function categorize(ctx: Context): Promise<Context> {
-  ctx.category = await ai.categorize(ctx.incoming.body, categories);
+  ctx.category = await ai.categorize({ text: ctx.incoming.body, allowed: categories });
   return ctx;
 }
 
 async function extractType(ctx: Context): Promise<Context> {
-  ctx.docType = await ai.extractType(ctx.incoming.body, types);
+  ctx.docType = await ai.extractType({ text: ctx.incoming.body, allowed: types });
   return ctx;
 }
 
@@ -55,13 +55,13 @@ async function persistDoc(ctx: Context): Promise<Context> {
 
 async function buildReply(ctx: Context): Promise<Context> {
   if (!ctx.category || !ctx.docType) return ctx;
-  ctx.reply = await ai.reply(ctx.category, ctx.docType);
+  ctx.reply = await ai.reply({ category: ctx.category, type: ctx.docType });
   return ctx;
 }
 
 async function dispatchReply(ctx: Context): Promise<Context> {
   if (ctx.reply && ctx.user) {
-    await twilio.sendMessage(ctx.user.phone, ctx.reply);
+    await twilio.sendMessage({ to: ctx.user.phone, body: ctx.reply });
   }
   return ctx;
 }

@@ -10,7 +10,7 @@ export const db = {
    * Replace with actual query / ORM call when integrating
    * with a real persistence layer.
    */
-  async getUser(phone: string): Promise<User> {
+  async getUser({ phone }: { phone: string }): Promise<User> {
     return {
       id: 'user_' + phone.replace(/\D/g, ''),
       phone
