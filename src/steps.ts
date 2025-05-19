@@ -4,7 +4,7 @@
  */
 import { db } from './db.js';
 import { ai } from './ai.js';
-import { twilio } from './twilio.js';
+import { twilio } from './services/twilioService.js';
 import { categories, types } from './constants.js';
 import { Doc, Message, User } from './types.js';
 
